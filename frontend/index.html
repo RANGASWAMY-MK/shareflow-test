@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ShareFlow Test</title>
+</head>
+<body>
+
+<h2>Upload File</h2>
+<form id="uploadForm">
+  <input type="file" name="file" required>
+  <button type="submit">Upload</button>
+</form>
+
+<h2>Send Message</h2>
+<input id="msg" placeholder="Type message">
+<button onclick="sendMessage()">Send</button>
+
+<p id="status"></p>
+
+<script>
+const backend = "http://localhost:5000"; // Change to Render URL later
+
+document.getElementById("uploadForm").onsubmit = async e => {
+  e.preventDefault();
+  const data = new FormData(e.target);
+
+  await fetch(backend + "/upload", { method: "POST", body: data });
+  document.getElementById("status").innerText = "File uploaded!";
+};
+
+async function sendMessage() {
+  const message = document.getElementById("msg").value;
+  await fetch(backend + "/message", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+  document.getElementById("status").innerText = "Message saved!";
+}
+</script>
+
+</body>
+</html>
